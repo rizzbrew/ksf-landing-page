@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Komunitas Solidaritas Furry</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:       #FF6B2B;
+      --orange-light: #FF8F5E;
+      --orange-dark:  #E04A0A;
+      --cream:        #FFF8F0;
+      --dark:         #1A1008;
+      --muted:        #7C5A3A;
+      --border:       rgba(255,107,43,0.2);
+      --font-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --font-body:    'Poppins', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--dark);
+      color: var(--cream);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999; opacity: .4;
+    }
+
+    .text-orange { color: var(--orange); }
+
+    .glow-orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(110px); pointer-events: none;
+    }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    .ksf-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px;
+      border-radius: 13px;
+      /*background: var(--orange);*/
+      font-family: var(--font-display);
+      font-weight: 900; font-size: 17px; letter-spacing: -.5px;
+      color: #fff; flex-shrink: 0;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 16px 0;
+      backdrop-filter: blur(20px);
+      background: rgba(26,16,8,.75);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1152px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-link { font-size: 14px; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-link:hover { color: var(--cream); }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--cream); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; flex-direction: column;
+      background: rgba(26,16,8,.97);
+      border-top: 1px solid var(--border);
+      padding: 12px 0 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      padding: 14px 24px; font-size: 15px; color: var(--muted);
+      text-decoration: none; border-bottom: 1px solid rgba(255,107,43,.07);
+      transition: color .2s, background .2s;
+    }
+    .mobile-menu a:hover { color: var(--cream); background: rgba(255,107,43,.05); }
+    .mob-cta { margin: 16px 24px 0; }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--orange); color: #fff;
+      font-family: var(--font-display); font-weight: 700; font-size: 15px;
+      padding: 13px 26px; border-radius: 12px; border: none; cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(255,107,43,.3);
+      transition: background .2s, transform .2s, box-shadow .2s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,107,43,.5); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--cream);
+      font-family: var(--font-body); font-weight: 500; font-size: 15px;
+      padding: 13px 26px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12); cursor: pointer;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+      white-space: nowrap;
+    }
+    .btn-ghost:hover { border-color: rgba(255,107,43,.5); background: rgba(255,107,43,.05); }
+    .btn-sm { font-size: 13px; padding: 10px 18px; border-radius: 10px; }
+
+    /* ── HERO ── */
+    .hero { padding: 150px 0 80px; position: relative; overflow: hidden; }
+    .hero-inner {
+      max-width: 1152px; margin: 0 auto; padding: 0 24px;
+      text-align: center; position: relative; z-index: 1;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-weight: 900; line-height: 1.0; letter-spacing: -3px;
+      font-size: clamp(48px, 9vw, 108px);
+      margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: clamp(15px, 2vw, 18px); color: var(--muted);
+      max-width: 540px; margin: 0 auto 40px; line-height: 1.75;
+    }
+    .hero-cta { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      overflow: hidden; padding: 18px 0;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      background: rgba(255,107,43,.03);
+    }
+    .marquee-track { display: flex; gap: 44px; white-space: nowrap; animation: marquee 26s linear infinite; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .mq-item { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; color: var(--muted); }
+    .mq-dot { color: var(--orange); }
+
+    /* ── SECTION WRAPPER ── */
+    .section-wrap { max-width: 1152px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── ABOUT ── */
+    .about-section { padding: 72px 0; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    .about-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .about-heading {
+      font-family: var(--font-display); font-size: clamp(28px, 4vw, 42px);
+      font-weight: 900; line-height: 1.1; margin-bottom: 20px;
+    }
+    .about-body { color: var(--muted); line-height: 1.8; margin-bottom: 16px; font-size: 15px; }
+
+    /* ── FEATURE CARDS ── */
+    .feature-card {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,107,43,.12);
+      border-radius: 18px; padding: 28px;
+      position: relative; overflow: hidden;
+      transition: border-color .3s, background .3s, transform .3s;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at top left, rgba(255,107,43,.06), transparent 60%);
+      pointer-events: none;
+    }
+    .feature-card:hover { border-color: rgba(255,107,43,.35); background: rgba(255,107,43,.05); transform: translateY(-4px); }
+    .card-icon {
+      width: 42px; height: 42px; border-radius: 11px;
+      background: rgba(255,107,43,.12); color: var(--orange);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px; flex-shrink: 0;
+    }
+    .card-h { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .card-p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    /* ── BADGES ── */
+    .badge-live {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.25);
+      color: #4ade80; font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 99px;
+    }
+    .badge-soon {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,107,43,.12); border: 1px solid rgba(255,107,43,.25);
+      color: var(--orange-light); font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 99px;
+    }
+
+    /* ── FEATURES ── */
+    .features-section { padding: 72px 0; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+    /* ── CTA ── */
+    .cta-section { padding: 72px 0; }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(255,107,43,.12), rgba(255,107,43,.04));
+      border: 1px solid rgba(255,107,43,.2);
+      border-radius: 24px; padding: 64px 40px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-h { font-family: var(--font-display); font-size: clamp(26px, 4vw, 38px); font-weight: 900; margin-bottom: 16px; }
+    .cta-p { color: var(--muted); font-size: 16px; max-width: 420px; margin: 0 auto 32px; line-height: 1.75; }
+
+    /* ── FAQ ── */
+    .faq-section { padding: 72px 0; }
+    .faq-wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+    .faq-heading { font-family: var(--font-display); font-size: clamp(28px, 4vw, 40px); font-weight: 900; text-align: center; margin-bottom: 48px; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+
+    details { border: 1px solid rgba(255,107,43,.12); border-radius: 14px; overflow: hidden; transition: border-color .3s; }
+    details[open] { border-color: rgba(255,107,43,.3); }
+    details summary {
+      list-style: none; cursor: pointer; padding: 18px 22px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 600; font-size: 15px; user-select: none;
+    }
+    details summary::-webkit-details-marker { display: none; }
+    details summary:hover { background: rgba(255,107,43,.04); }
+    .faq-body { padding: 0 22px 18px; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .chevron { width: 18px; height: 18px; flex-shrink: 0; color: var(--orange); transition: transform .3s; }
+    details[open] .chevron { transform: rotate(180deg); }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; }
+    .footer-inner { max-width: 1152px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; gap: 20px; }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .footer-links { display: flex; align-items: center; gap: 28px; }
+    .footer-link { font-size: 14px; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-link:hover { color: var(--cream); }
+    .footer-bottom {
+      padding-top: 10px;
+      font-size: 13px; color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up { opacity: 0; transform: translateY(28px); animation: fup .8s ease forwards; }
+    .d1 { animation-delay: .1s; } .d2 { animation-delay: .25s; } .d3 { animation-delay: .4s; }
+    @keyframes fup { to { opacity:1; transform:translateY(0); } }
+
+    .paw-deco { position: absolute; pointer-events: none; opacity: .09; }
+
+    /* ══════════════════════════
+       RESPONSIVE
+    ══════════════════════════ */
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .about-grid     { grid-template-columns: 1fr; gap: 40px; }
+      .about-cards    { grid-template-columns: 1fr 1fr; }
+      .features-grid  { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .hero { padding: 110px 0 64px; }
+      .hero-title { letter-spacing: -1.5px; }
+
+      .about-section,
+      .features-section,
+      .faq-section,
+      .cta-section { padding: 56px 0; }
+
+      /* Force single column on mobile */
+      .about-grid  { grid-template-columns: 1fr !important; gap: 32px; }
+      .about-cards { grid-template-columns: 1fr !important; }
+
+      .features-grid { grid-template-columns: 1fr !important; }
+
+      .cta-box { padding: 48px 24px; }
+
+      .footer-top { flex-direction: column; align-items: flex-start; }
+      .footer-links { flex-wrap: wrap; gap: 16px; }
+    }
+
+    /* Small mobile */
+    @media (max-width: 480px) {
+      .hero { padding: 100px 0 56px; }
+      .hero-title { letter-spacing: -1px; }
+      .hero-cta { flex-direction: column; align-items: stretch; }
+      .hero-cta .btn-primary,
+      .hero-cta .btn-ghost { justify-content: center; width: 100%; }
+      .feature-card { padding: 20px 18px; }
+      details summary { font-size: 14px; padding: 16px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">
+        <div class="ksf-badge">KSF</div>
+        <div>
+          <div style="font-family:'Helvetica Neue',sans-serif;font-weight:800;font-size:14px;color:#fff;line-height:1.2">Komunitas Solidaritas Furry</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.2">kosofurr.dev</div>
+        </div>
+      </a>
+
+      <div class="nav-links">
+        <a class="nav-link" href="#about">About</a>
+        <a class="nav-link" href="#features">Features</a>
+        <a class="nav-link" href="#faq">FAQ</a>
+        <a class="btn-primary btn-sm" href="https://chat.whatsapp.com/CY7FKxKA7La3cxs7u5iAz1" target="_blank" rel="noopener">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          Join
+        </a>
+      </div>
+
+      <button class="hamburger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about"    onclick="closeMenu()">About</a>
+      <a href="#features" onclick="closeMenu()">Features</a>
+      <a href="#faq"      onclick="closeMenu()">FAQ</a>
+      <div class="mob-cta">
+        <a class="btn-primary" style="width:100%;justify-content:center" href="https://chat.whatsapp.com/CY7FKxKA7La3cxs7u5iAz1" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          Join via WhatsApp
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="glow-orb" style="width:600px;height:600px;background:rgba(255,107,43,.12);top:-180px;left:-160px"></div>
+    <div class="glow-orb" style="width:380px;height:380px;background:rgba(255,107,43,.08);bottom:-80px;right:-80px"></div>
+    <svg class="paw-deco" style="top:110px;right:7%;width:88px;height:88px" viewBox="0 0 100 100" fill="#FF6B2B">
+      <ellipse cx="30" cy="20" rx="11" ry="14" transform="rotate(-20 30 20)"/>
+      <ellipse cx="55" cy="14" rx="11" ry="14" transform="rotate(5 55 14)"/>
+      <ellipse cx="78" cy="22" rx="11" ry="14" transform="rotate(20 78 22)"/>
+      <ellipse cx="14" cy="42" rx="9"  ry="12" transform="rotate(-35 14 42)"/>
+      <ellipse cx="50" cy="70" rx="30" ry="28"/>
+    </svg>
+    <svg class="paw-deco" style="bottom:60px;left:5%;width:60px;height:60px;transform:rotate(30deg)" viewBox="0 0 100 100" fill="#FF6B2B">
+      <ellipse cx="30" cy="20" rx="11" ry="14" transform="rotate(-20 30 20)"/>
+      <ellipse cx="55" cy="14" rx="11" ry="14" transform="rotate(5 55 14)"/>
+      <ellipse cx="78" cy="22" rx="11" ry="14" transform="rotate(20 78 22)"/>
+      <ellipse cx="14" cy="42" rx="9"  ry="12" transform="rotate(-35 14 42)"/>
+      <ellipse cx="50" cy="70" rx="30" ry="28"/>
+    </svg>
+    <div class="hero-inner">
+         </br>
+            </br
+               </br>
+      <h1 class="hero-title fade-up d1">
+        One<br><span class="text-orange">Community,</span><br>Many Stories.
+      </h1>
+      <p class="hero-sub fade-up d2">
+        A safe and warm space for Indonesian furries get to know each other, share your work, and grow together.
+      </p>
+      <div class="hero-cta fade-up d3">
+        <a class="btn-primary" href="https://chat.whatsapp.com/CY7FKxKA7La3cxs7u5iAz1" target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Join Now
+        </a>
+        <a class="btn-ghost" href="#about">
+          Learn More
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="mq-item"><svg width="13" height="13" viewBox="0 0 100 100" fill="#FF6B2B" style="opacity:.55"><ellipse cx="30" cy="20" rx="11" ry="14" transform="rotate(-20 30 20)"/><ellipse cx="55" cy="14" rx="11" ry="14" transform="rotate(5 55 14)"/><ellipse cx="78" cy="22" rx="11" ry="14" transform="rotate(20 78 22)"/><ellipse cx="14" cy="42" rx="9" ry="12" transform="rotate(-35 14 42)"/><ellipse cx="50" cy="70" rx="30" ry="28"/></svg>Mutual Support</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Inclusive Community</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Share Your Art</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Events &amp; Meetups</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item"><svg width="13" height="13" viewBox="0 0 100 100" fill="#FF6B2B" style="opacity:.55"><ellipse cx="30" cy="20" rx="11" ry="14" transform="rotate(-20 30 20)"/><ellipse cx="55" cy="14" rx="11" ry="14" transform="rotate(5 55 14)"/><ellipse cx="78" cy="22" rx="11" ry="14" transform="rotate(20 78 22)"/><ellipse cx="14" cy="42" rx="9" ry="12" transform="rotate(-35 14 42)"/><ellipse cx="50" cy="70" rx="30" ry="28"/></svg>Free Expression</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Open Discussion</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Artist Showcase</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Fursona Gallery</span>
+      <span class="mq-dot">&#10022;</span>
+      <!-- duplicate for seamless loop -->
+      <span class="mq-item"><svg width="13" height="13" viewBox="0 0 100 100" fill="#FF6B2B" style="opacity:.55"><ellipse cx="30" cy="20" rx="11" ry="14" transform="rotate(-20 30 20)"/><ellipse cx="55" cy="14" rx="11" ry="14" transform="rotate(5 55 14)"/><ellipse cx="78" cy="22" rx="11" ry="14" transform="rotate(20 78 22)"/><ellipse cx="14" cy="42" rx="9" ry="12" transform="rotate(-35 14 42)"/><ellipse cx="50" cy="70" rx="30" ry="28"/></svg>Mutual Support</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Inclusive Community</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Share Your Art</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Events &amp; Meetups</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item"><svg width="13" height="13" viewBox="0 0 100 100" fill="#FF6B2B" style="opacity:.55"><ellipse cx="30" cy="20" rx="11" ry="14" transform="rotate(-20 30 20)"/><ellipse cx="55" cy="14" rx="11" ry="14" transform="rotate(5 55 14)"/><ellipse cx="78" cy="22" rx="11" ry="14" transform="rotate(20 78 22)"/><ellipse cx="14" cy="42" rx="9" ry="12" transform="rotate(-35 14 42)"/><ellipse cx="50" cy="70" rx="30" ry="28"/></svg>Free Expression</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Open Discussion</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Artist Showcase</span>
+      <span class="mq-dot">&#10022;</span>
+      <span class="mq-item">Fursona Gallery</span>
+      <span class="mq-dot">&#10022;</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about-section" id="about">
+   </br>
+      </br>
+         </br>
+    <div class="section-wrap">
+      <div class="about-grid">
+        <div>
+          <div class="section-label" style="margin-bottom:14px">About KSF</div>
+          <h2 class="about-heading">
+            One community,<br><span class="text-orange">many stories.</span>
+          </h2>
+          <p class="about-body">
+            Komunitas Solidaritas Furry (KSF) is a gathering space for Indonesian furries from those just discovering the furry world to long time members of the fandom.
+          </p>
+          <p class="about-body">
+            We believe everyone deserves to express themselves freely, safely, and with dignity. KSF is here to bridge connections, support local artists, and build a positive space for all.
+          </p>
+        </div>
+        <div class="about-cards">
+          <div class="feature-card" style="grid-column:span 2">
+            <div class="card-icon">
+              <svg width="22" height="22" viewBox="0 0 100 100" fill="currentColor"><ellipse cx="30" cy="20" rx="11" ry="14" transform="rotate(-20 30 20)"/><ellipse cx="55" cy="14" rx="11" ry="14" transform="rotate(5 55 14)"/><ellipse cx="78" cy="22" rx="11" ry="14" transform="rotate(20 78 22)"/><ellipse cx="14" cy="42" rx="9" ry="12" transform="rotate(-35 14 42)"/><ellipse cx="50" cy="70" rx="30" ry="28"/></svg>
+            </div>
+            <div class="card-h">Solidarity Above All</div>
+            <p class="card-p">We support each other, respect our differences, and look out for one another within the community.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="section-wrap">
+      <div style="text-align:center;margin-bottom:56px">
+        <div class="section-label" style="margin-bottom:14px">Platform</div>
+        <h2 style="font-family:'Helvetica Neue',sans-serif;font-size:clamp(28px,4vw,40px);font-weight:900;line-height:1.1">What are we building?</h2>
+        <p style="color:var(--muted);margin-top:14px;font-size:15px">Lots of exciting things coming for the community.</p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-icon" style="margin-bottom:0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            </div>
+            <span class="badge-live">Available</span>
+          </div>
+          <div class="card-h">WhatsApp Group</div>
+          <p class="card-p" style="margin-bottom:18px">Join the KSF WhatsApp group casual chats, event coordination, and meeting new people!</p>
+          <a href="https://chat.whatsapp.com/CY7FKxKA7La3cxs7u5iAz1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;color:var(--orange);font-size:13px;font-weight:600;text-decoration:none">
+            Join Now
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 17 17 7M17 7H7M17 7v10"/></svg>
+          </a>
+        </div>
+
+        <div class="feature-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-icon" style="margin-bottom:0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            </div>
+            <span class="badge-soon">Coming Soon</span>
+          </div>
+          <div class="card-h">Fursona Gallery</div>
+          <p class="card-p">Show off your fursona! Upload reference sheets, lore, and the story behind your character.</p>
+        </div>
+
+        <div class="feature-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-icon" style="margin-bottom:0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13.5" cy="6.5" r="1"/><circle cx="17.5" cy="10.5" r="1"/><circle cx="8.5" cy="7.5" r="1"/><circle cx="6.5" cy="12.5" r="1"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+            </div>
+            <span class="badge-soon">Coming Soon</span>
+          </div>
+          <div class="card-h">Artist Showcase</div>
+          <p class="card-p">A dedicated platform for local furry artists to display their work and open commissions.</p>
+        </div>
+
+        <div class="feature-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-icon" style="margin-bottom:0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            </div>
+            <span class="badge-soon">Coming Soon</span>
+          </div>
+          <div class="card-h">Events &amp; Meetups</div>
+          <p class="card-p">Community event schedules, local furmeets, and online events you can join.</p>
+        </div>
+
+        <div class="feature-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-icon" style="margin-bottom:0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+            </div>
+            <span class="badge-soon">Coming Soon</span>
+          </div>
+          <div class="card-h">Blog &amp; Forum</div>
+          <p class="card-p">Write stories, opinions, and guides. Long-form discussion about topics you love.</p>
+        </div>
+
+        <div class="feature-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-icon" style="margin-bottom:0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <span class="badge-soon">Coming Soon</span>
+          </div>
+          <div class="card-h">Safe Space Policy</div>
+          <p class="card-p">A transparent moderation system to keep the community safe and comfortable for everyone.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="section-wrap">
+      <div class="cta-box">
+        <div class="glow-orb" style="width:280px;height:280px;background:rgba(255,107,43,.08);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+        <svg style="position:absolute;bottom:-16px;right:-16px;width:150px;height:150px;opacity:.06" viewBox="0 0 100 100" fill="#FF6B2B">
+          <ellipse cx="30" cy="20" rx="11" ry="14" transform="rotate(-20 30 20)"/>
+          <ellipse cx="55" cy="14" rx="11" ry="14" transform="rotate(5 55 14)"/>
+          <ellipse cx="78" cy="22" rx="11" ry="14" transform="rotate(20 78 22)"/>
+          <ellipse cx="14" cy="42" rx="9"  ry="12" transform="rotate(-35 14 42)"/>
+          <ellipse cx="50" cy="70" rx="30" ry="28"/>
+        </svg>
+        <div style="position:relative;z-index:1">
+          <div style="display:flex;justify-content:center;margin-bottom:18px">
+            <div style="width:52px;height:52px;border-radius:14px;background:rgba(255,107,43,.15);border:1px solid rgba(255,107,43,.25);display:flex;align-items:center;justify-content:center;color:var(--orange)">
+              <svg width="26" height="26" viewBox="0 0 100 100" fill="currentColor"><ellipse cx="30" cy="20" rx="11" ry="14" transform="rotate(-20 30 20)"/><ellipse cx="55" cy="14" rx="11" ry="14" transform="rotate(5 55 14)"/><ellipse cx="78" cy="22" rx="11" ry="14" transform="rotate(20 78 22)"/><ellipse cx="14" cy="42" rx="9" ry="12" transform="rotate(-35 14 42)"/><ellipse cx="50" cy="70" rx="30" ry="28"/></svg>
+            </div>
+          </div>
+          <h2 class="cta-h">Ready to join?</h2>
+          <p class="cta-p">This community is open to everyone. No fursuit needed, no experience required just come as you are.</p>
+          <a class="btn-primary" style="font-size:16px;padding:15px 34px" href="https://chat.whatsapp.com/CY7FKxKA7La3cxs7u5iAz1" target="_blank" rel="noopener">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            Join via WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="faq-wrap">
+      <div style="text-align:center;margin-bottom:16px">
+        <div class="section-label">FAQ</div>
+      </div>
+      <h2 class="faq-heading">Common Questions</h2>
+      <div class="faq-list">
+
+        <details>
+          <summary><span>What is furry and what is KSF?</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-body">Furry is a fandom centered around anthropomorphic animal characters. KSF (Komunitas Solidaritas Furry) is an Indonesian furry community focused on inclusivity, solidarity, and mutual support among its members.</div>
+        </details>
+
+        <details>
+          <summary><span>Do I need a fursona to join?</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-body">Not at all! You can join even without a fursona. Many of our members are still in the process of creating their first character — and this community is here to help!</div>
+        </details>
+
+        <details>
+          <summary><span>What platform does KSF use?</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-body">We're currently active on WhatsApp. Going forward, we'll be developing our own platform at kosofurr.dev with more complete features for the Indonesian furry community.</div>
+        </details>
+
+        <details>
+          <summary><span>Is this community safe for all ages?</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-body">KSF is an all-ages friendly community. We have strict content rules, and our active moderation team ensures the environment stays safe and comfortable for all members.</div>
+        </details>
+
+        <details>
+          <summary><span>How can I contribute to KSF?</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-body">You can contribute by being active in the WhatsApp group, sharing artwork, helping with moderation, or even joining platform development. Reach out to our admins for more info!</div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+<!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-inner">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="ksf-badge" style="width:38px;height:38px;font-size:13px;border-radius:10px">KSF</div>
+        <div>
+          <div style="font-family:var(--font-display);font-weight:800;font-size:13px">Komunitas Solidaritas Furry</div>
+          <div style="font-size:11px;color:var(--muted)">kosofurr.dev</div>
+        </div>
+      </div>
+<div class="footer-links">
+        <a class="footer-link" href="#about">About</a>
+        <a class="footer-link" href="#features">Features</a>
+        <a class="footer-link" href="#faq">FAQ</a>
+      </div>
+      <div class="footer-bottom">&copy; <span id="yr"></span> Komunitas Solidaritas Furry &mdash; All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    const burger = document.getElementById('burger');
+    const menu   = document.getElementById('mobileMenu');
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('open');
+      menu.classList.toggle('open');
+    });
+    function closeMenu() {
+      burger.classList.remove('open');
+      menu.classList.remove('open');
+    }
+    document.addEventListener('click', e => {
+      if (!burger.contains(e.target) && !menu.contains(e.target)) closeMenu();
+    });
+  </script>
+</body>
+</html>
